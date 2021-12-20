@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from datetime import datetime
 
 # class Usuario(models.Model):
 #     username = models.CharField(max_length=40, verbose_name='username')
@@ -19,7 +20,7 @@ class User(AbstractUser):
     biografia = models.CharField(max_length=255, null=True, verbose_name='biografia')
     # username = models.CharField(max_length=40, unique=True, verbose_name='username')
     # password = models.CharField(max_length=255, verbose_name='password')
-    fechaAlta = models.DateField(verbose_name='fechaAlta', null=True)
+    fechaAlta = models.DateField(verbose_name='fechaAlta', null=True, default=datetime.now)
     activo = models.BooleanField(verbose_name='activo',default=False, null=True)
     # usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE, verbose_name="idUsuario")
 
