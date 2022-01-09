@@ -1,4 +1,4 @@
-{% extends 'layout.html' %}
+{% extends 'index.html' %}
 {% load widget_tweaks %}
 {% block head %}
     {% block head_form %}
@@ -69,18 +69,5 @@
                 icon: 'error'
             });
         {% endif %}
-
-        
-        {% if messages %}
-            {% for m in messages %}
-                <script>
-                    Swal.fire({
-                        title: 'Información',
-                        text: "{{m}}",
-                        icon: 'success'
-                    })
-                </script>     
-            {% endfor %}
-  {     {% endif %}
     </script>
 {% endblock %}
