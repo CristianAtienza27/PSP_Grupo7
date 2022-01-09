@@ -8,18 +8,18 @@ from core.user.models import User
 class UserForm(UserCreationForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['nombre'].widget.attrs['autofocus'] = True
+        self.fields['first_name'].widget.attrs['autofocus'] = True
 
     class Meta:
         model = User
-        fields = 'nombre', 'apellidos','direccion','fechaNacimiento','dni','username'
+        fields = 'first_name','last_name','direccion','fechaNacimiento','dni','username'
         widgets = {
-            'nombre': TextInput(
+            'first_name': TextInput(
                 attrs={
                     'placeholder': 'Ingrese su nombre',
                 }
             ),
-            'apellidos': TextInput(
+            'last_name': TextInput(
                 attrs={
                     'placeholder': 'Ingrese sus apellidos',
                 }
@@ -34,7 +34,7 @@ class UserForm(UserCreationForm):
                 attrs={
                     'value': datetime.now().strftime('%Y-%m-%d'),
                                        }
-                                       ),
+                    ),
             'dni': TextInput(
                 attrs={ 
                     'placeholder': 'Ingrese su DNI'
