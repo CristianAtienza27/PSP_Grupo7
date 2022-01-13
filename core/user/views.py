@@ -38,7 +38,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = UserForm
     template_name = 'create.html'
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy('index')
     url_redirect = success_url
 
     def dispatch(self, request, *args, **kwargs):
