@@ -43,7 +43,10 @@ INSTALLED_APPS = [
     # Apps
     'core.homepage',
     'core.login',
+    'core.adm',
     'core.user',
+    'core.client',
+    'core.employee',
 ]
 
 MIDDLEWARE = [
@@ -126,13 +129,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-LOGIN_REDIRECT_URL = 'index'
-
-LOGOUT_REDIRECT_URL = '/login/'
-
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
+LOGIN_REDIRECT_URL = 'index'
+
+LOGOUT_REDIRECT_URL = '/login/'
 
 LOGIN_URL = '/login/'
 

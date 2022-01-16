@@ -7,6 +7,7 @@
 {% endblock %}
 {% block content %}
     <form method="post" action="." enctype="multipart/form-data">
+        {% csrf_token %}
         <div class="card card-primary">
             <div class="card-header">
                 <h3 class="card-title">
@@ -20,7 +21,6 @@
                 </h3>
             </div>
             <div class="card-body">
-                {% csrf_token %}
                 <input type="hidden" name="action" value="{{ action }}">
                 {% if form.errors %}
                     <div class="alert alert-danger alert-dismissible">
@@ -35,11 +35,31 @@
                         </ul>
                     </div>
                 {% endif %}
+                {% if form2.errors %}
+                    <div class="alert alert-danger alert-dismissible">
+                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+                        <h5><i class="icon fas fa-ban"></i> Ha ocurrido un error al querer guardar el registro</h5>
+                        <ul>
+                            {% for field in form2 %}
+                                {% for error in field.errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
                 {% for field in form.visible_fields %}
                     <div class="form-group">
-                        <label for="email">{{ field.label }}:</label>
+                        <label>{{ field.label }}:</label>
                         {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
                     </div>
+                {% endfor %}
+                {% for field in form2.visible_fields %}
+                <div class="form-group">
+                    <label>{{ field.label }}:</label>
+                    {{ field|add_class:'form-control'|attr:'autocomplete:off' }}
+                </div>
                 {% endfor %}
             </div>
             <div class="card-footer">
@@ -68,6 +88,36 @@
                 text: errors,
                 icon: 'error'
             });
+        {% endif %}
+        
+        {% if form2.errors %}
+            var errors = '';
+            {% for field in form2 %}
+                {% for error in field.errors %}
+                    errors += '{{ error }}\n';
+                {% endfor %}
+            {% endfor %}
+            {% for error in form2.non_field_errors %}
+                errors += '{{ error }}\n';
+            {% endfor %}
+            Swal.fire({
+                title: 'Error!',
+                text: errors,
+                icon: 'error'
+            });
+        {% endif %}
+
+        
+        {% if messages %}
+            {% for m in messages %}
+                <script>
+                    Swal.fire({
+                        title: 'Información',
+                        text: "{{m}}",
+                        icon: 'success'
+                    })
+                </script>     
+            {% endfor %}
         {% endif %}
     </script>
 {% endblock %}

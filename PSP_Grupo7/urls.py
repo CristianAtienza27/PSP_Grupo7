@@ -22,5 +22,6 @@ urlpatterns = [
     path('', IndexView.as_view(), name='index'),
     path('login/', include('core.login.urls')),
     path('admin/', admin.site.urls),
-    path('user/', include('core.user.urls')),
+    path('client/', include('core.client.urls')),
+    path('adm', include('core.adm.urls')),
 ]
