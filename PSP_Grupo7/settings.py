@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'core.user',
     'core.client',
     'core.employee',
+    'core.category',
+    'core.project',
 ]
 
 MIDDLEWARE = [
@@ -132,6 +134,8 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
+MEDIA_URL = '/'
 
 LOGIN_REDIRECT_URL = 'index'
 

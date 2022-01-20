@@ -10,7 +10,7 @@
         <th scope="col" style="width: 15%;">Apellidos</th>
         <th scope="col" style="width: 10%;">Dni</th>
         <th scope="col" style="width: 15%;">Dirección</th>
-        <th scope="col" style="width: 15%;">Fecha de Nacimiento</th>
+        <th scope="col" style="width: 15%;">Biografía</th>
     </tr>
 {% endblock %}
 
@@ -21,9 +21,9 @@
         <td>{{ empl.apellidos }}</td>
         <td>{{ empl.dni }}</td>
         <td>{{ empl.direccion }}</td>
-        <td>{{ empl.fechaNacimiento }}</td>
-        <td><a href="{% url 'adm:client_update' pk=client.id %}" class="btn btn-warning btn-flat">Editar</a>
-        <a href="/adm/client/delete/{{client.id}}/" class="btn btn-danger btn-flat">Eliminar</a></td>
+        <td>{{ empl.biografia }}</td>
+        <td><a href="{% url 'adm:employee_update' pk=empl.id %}" class="btn btn-warning btn-flat">Editar</a>
+        <a href="{% url 'adm:employee_delete' pk=empl.id %}" class="btn btn-danger btn-flat">Eliminar</a></td>
     </tr>
     {% endfor %}
 {% endblock %}

@@ -22,8 +22,15 @@
         <td>{{ client.dni }}</td>
         <td>{{ client.direccion }}</td>
         <td>{{ client.fechaNacimiento }}</td>
-        <td><a href="{% url 'adm:client_update' pk=client.id %}" class="btn btn-warning btn-flat">Editar</a>
-        <a href="/adm/client/delete/{{client.id}}/" class="btn btn-danger btn-flat">Eliminar</a></td>
+        <td>
+        {% if client.activo == 0 %}
+        <a href="{% url 'adm:client_activate' pk=client.id %}" class="btn btn-primary btn-flat">Activar</a></td>
+        {% else %}
+        <a href="{% url 'adm:client_deactivate' pk=client.id %}" class="btn btn-primary btn-flat">Desactivar</a>
+        {% endif %}
+        <td>
+        <a href="{% url 'adm:client_update' pk=client.id %}" class="btn btn-warning btn-flat">Editar</a>
+        <a href="{% url 'adm:client_delete' pk=client.id %}" class="btn btn-danger btn-flat">Eliminar</a></td>
     </tr>
     {% endfor %}
 {% endblock %}

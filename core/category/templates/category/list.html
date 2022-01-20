@@ -1,0 +1,25 @@
+{% extends 'list.html' %}
+{% load static %}
+{% block head_list %}
+
+{% endblock %}
+
+{% block columns %}
+    <tr>
+        <th scope="col" style="width: 15%;">Nombre</th>
+        <th scope="col" style="width: 15%;">Categoría</th>
+    </tr>
+{% endblock %}
+
+{% block rows %}
+    {% for cat in categories %}
+    <tr>
+        <td>{{ cat.nombre }}</td>
+        <td><img src="{{cat.foto.url}}"  width="50" height="50"></td>
+    </tr>
+    {% endfor %}
+{% endblock %}
+
+{% block javascript %}
+
+{% endblock %}

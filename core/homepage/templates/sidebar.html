@@ -46,6 +46,12 @@
                     <p>Empleados</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'adm:category_list'%}">
+                    <i class="far fa-circle nav-icon" aria-hidden="true"></i>
+                    <p>Categorías</p>
+                </a>
+              </li>
               {% else %}
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'client:client_update' pk=request.user.id %}">
