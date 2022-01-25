@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy,reverse
 from core.client.forms import ClientForm
-from core.user.forms import UserCreationFormWithUsername
+from core.user.forms import UserForm
 from core.user.models import User
 from core.client.models import Client
 from django.contrib import messages
@@ -40,7 +40,7 @@ def ClientDeactivateView(request,pk):
 class ClientCreateView(CreateView):
     model = Client
     form_class = ClientForm
-    second_form_class = UserCreationFormWithUsername
+    second_form_class = UserForm
     template_name = 'client/create.html'
     success_url = reverse_lazy('login')
     url_redirect = success_url
@@ -76,7 +76,7 @@ class ClientCreateView(CreateView):
 class ClientUpdateView(LoginRequiredMixin,UpdateView):
     model = Client
     form_class = ClientForm
-    second_form_class = UserCreationFormWithUsername
+    second_form_class = UserForm
     template_name = 'client/create.html'
     # permission_required = ('client.change_client')
     success_url = reverse_lazy('login')

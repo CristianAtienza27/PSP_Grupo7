@@ -3,7 +3,7 @@ from core.client.models import Client
 from core.employee.models import Employee
 from core.category.models import Category
 
-class Proyecto(models.Model):
+class Project(models.Model):
     titulo = models.CharField(max_length=150, verbose_name='titulo')
     descripcion = models.CharField(max_length=255, verbose_name='descripcion')
     nivel = models.IntegerField(verbose_name='nivel')
@@ -18,6 +18,6 @@ class Proyecto(models.Model):
 
 class Participa(models.Model):
     cliente = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name='idCliente', related_name='cliente')
-    proyecto = models.ForeignKey(Proyecto, on_delete=models.CASCADE, verbose_name='idProyecto', related_name='proyecto')
+    proyecto = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name='idProyecto', related_name='proyecto')
     fechaInscripcion = models.DateField(verbose_name='fechaInscripcion')
     rol = models.CharField(max_length=100, verbose_name='rol')

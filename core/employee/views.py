@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy,reverse
 from core.client.forms import ClientForm
-from core.user.forms import UserCreationFormWithUsername
+from core.user.forms import UserForm
 from core.user.models import User
 from core.client.models import Client
 from core.employee.models import Employee
@@ -32,7 +32,7 @@ class EmployeeListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, List
 class EmployeeCreateView(CreateView):
     model = Employee
     form_class = EmployeeForm
-    second_form_class = UserCreationFormWithUsername
+    second_form_class = UserForm
     template_name = 'employee/create.html'
     success_url = reverse_lazy('login')
     url_redirect = success_url
@@ -70,7 +70,7 @@ class EmployeeCreateView(CreateView):
 class EmployeeUpdateView(CreateView):
     model = Employee
     form_class = EmployeeForm
-    second_form_class = UserCreationFormWithUsername
+    second_form_class = UserForm
     template_name = 'employee/create.html'
     success_url = reverse_lazy('login')
     url_redirect = success_url

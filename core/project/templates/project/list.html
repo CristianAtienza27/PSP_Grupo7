@@ -12,13 +12,13 @@
 {% endblock %}
 
 {% block rows %}
-    {% for cat in categories %}
-    <tr>
-        <td>{{ cat.nombre }}</td>
+    {% for project in projects %}
+    <!-- <tr>
+        <td>{{ project.nombre }}</td>
         <td><img src="{{cat.foto.url}}"  width="50" height="50"></td>
         <td><a href="{% url 'adm:category_update' pk=cat.id %}" class="btn btn-warning btn-flat">Editar</a>
             <a href="{% url 'adm:category_delete' pk=cat.id %}" class="btn btn-danger btn-flat">Eliminar</a></td>
-    </tr>
+    </tr> -->
     {% endfor %}
 {% endblock %}
 

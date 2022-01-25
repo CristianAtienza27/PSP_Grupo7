@@ -36,18 +36,47 @@ class CategoryCreateView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Creación de Categoría'
-        context['create_url'] = reverse_lazy('adm:category_list')
+        context['list_url'] = reverse_lazy('adm:category_list')
         return context
     
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object
-        form = self.form_class(request.POST)
+    def get_success_url(self):
+        messages.success(self.request, 'Categoría registrada con éxito')
+        return reverse('adm:category_list')
 
-        if form.is_valid():
-            category = form.save(commit=False)
-            category.save()
-            messages.success(request, 'Categoría registrada con éxito')
-            url = reverse('adm:category_list')
-            return HttpResponseRedirect(url)        
-        else:
-            return self.render_to_response(self.get_context_data(form=form))
+class CategoryUpdateView(LoginRequiredMixin, UpdateView):
+    model = Category
+    form_class = CategoryForm
+    template_name = 'category/create.html'
+    # permission_required = '.view_client'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Edición de Categoría'
+        context['list_url'] = reverse_lazy('adm:category_list')
+        return context
+    
+    def get_success_url(self):
+        messages.success(self.request, 'Categoría editada con éxito')
+        return reverse('adm:category_list')
+
+class CategoryDeleteView(LoginRequiredMixin, DeleteView):
+    model = Category
+    template_name = 'category/delete.html'
+    success_url = reverse_lazy('adm:category_list')
+    # permission_required = 'adm..delete_client'
+    url_redirect = success_url
+
+    def dispatch(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        self.object.delete()
+        messages.success(request, 'Categoría eliminada con éxito')
+        return HttpResponseRedirect(self.success_url)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Eliminación de Categoría'
+        context['list_url'] = self.success_url
+        return context
