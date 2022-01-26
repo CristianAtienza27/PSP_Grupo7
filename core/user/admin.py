@@ -1,8 +1,9 @@
 from django.contrib import admin
-
-# Register your models here.
+from core.category.models import Category
+from core.project.models import Participa, Project
 from core.user.models import User
-# from core.client.models import Client
 
 admin.site.register(User)
-# admin.site.register(Client)
+admin.site.register(Project)
+admin.site.register(Participa)
+admin.site.register(Category)
