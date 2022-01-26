@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy,reverse
 from core.client.forms import ClientForm
-from core.category.forms import CategoryForm
+from core.project.forms import ProjectForm
 from core.user.models import User
 from core.category.models import Category
 from core.project.models import Project
@@ -24,45 +24,44 @@ class ProjectListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Listado de Proyectos'
         context['projects'] = Project.objects.all()
-        context['create_url'] = reverse_lazy('adm:category_create')
+        context['create_url'] = reverse_lazy('project:project_create')
         return context
 
-class CategoryCreateView(LoginRequiredMixin, CreateView):
-    model = Category
-    form_class = CategoryForm
-    template_name = 'category/create.html'
+class ProjectCreateView(LoginRequiredMixin, CreateView):
+    model = Project
+    form_class = ProjectForm
+    template_name = 'project/create.html'
     # permission_required = '.view_client'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Creación de Categoría'
-        context['list_url'] = reverse_lazy('adm:category_list')
+        context['title'] = 'Creación de Proyecto'
+        context['list_url'] = reverse_lazy('project:project_list')
         return context
     
     def get_success_url(self):
-        messages.success(self.request, 'Categoría registrada con éxito')
-        return reverse('adm:category_list')
+        messages.success(self.request, 'Proyecto registrado con éxito')
+        return reverse('project:project_list')
 
-class CategoryUpdateView(LoginRequiredMixin, UpdateView):
-    model = Category
-    form_class = CategoryForm
-    template_name = 'category/create.html'
-    # permission_required = '.view_client'
+class ProjectUpdateView(LoginRequiredMixin, UpdateView):
+    model = Project
+    form_class = ProjectForm
+    template_name = 'project/create.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Edición de Categoría'
-        context['list_url'] = reverse_lazy('adm:category_list')
+        context['title'] = 'Editar Proyecto'
+        context['list_url'] = reverse_lazy('project:project_list')
         return context
     
     def get_success_url(self):
-        messages.success(self.request, 'Categoría editada con éxito')
-        return reverse('adm:category_list')
+        messages.success(self.request, 'Proyecto actualizado con éxito')
+        return reverse('project:project_list')
 
-class CategoryDeleteView(LoginRequiredMixin, DeleteView):
+class ProjectDeleteView(LoginRequiredMixin, DeleteView):
     model = Category
-    template_name = 'category/delete.html'
-    success_url = reverse_lazy('adm:category_list')
+    template_name = 'project/delete.html'
+    success_url = reverse_lazy('project:project_list')
     # permission_required = 'adm..delete_client'
     url_redirect = success_url
 
@@ -70,10 +69,9 @@ class CategoryDeleteView(LoginRequiredMixin, DeleteView):
         self.object = self.get_object()
         return super().dispatch(request, *args, **kwargs)
 
-    def post(self, request, *args, **kwargs):
-        self.object.delete()
-        messages.success(request, 'Categoría eliminada con éxito')
-        return HttpResponseRedirect(self.success_url)
+    def get_success_url(self):
+        messages.success(self.request, 'Proyecto eliminado con éxito')
+        return reverse(self.success_url)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

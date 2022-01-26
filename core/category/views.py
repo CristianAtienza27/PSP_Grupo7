@@ -5,7 +5,6 @@ from core.client.forms import ClientForm
 from core.category.forms import CategoryForm
 from core.user.models import User
 from core.category.models import Category
-from core.employee.models import Employee
 from core.employee.forms import EmployeeForm
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm

@@ -5,21 +5,34 @@
 {% endblock %}
 
 {% block columns %}
-    <tr>
+    <!-- <tr>
         <th scope="col" style="width: 15%;">Nombre</th>
         <th scope="col" style="width: 15%;">Categoría</th>
-    </tr>
+    </tr> -->
 {% endblock %}
 
 {% block rows %}
     {% for project in projects %}
-    <!-- <tr>
-        <td>{{ project.nombre }}</td>
-        <td><img src="{{cat.foto.url}}"  width="50" height="50"></td>
-        <td><a href="{% url 'adm:category_update' pk=cat.id %}" class="btn btn-warning btn-flat">Editar</a>
-            <a href="{% url 'adm:category_delete' pk=cat.id %}" class="btn btn-danger btn-flat">Eliminar</a></td>
-    </tr> -->
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col">
+          <div class="card h-100">
+            <img src="{{project.categoria.foto.url}}" width="50" height="150" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title">{{ project.titulo}}</h5>
+              <p class="card-text">Nivel: {{ project.nivel }}</p>
+              <p class="card-text">{{ project.descripcion }}</p>
+            </div>
+            <div class="card-footer">
+              <small class="text-muted">Del {{ project.fechaInicio}} al {{ project.fechaFin }}</small>
+            </div>
+          </div>
+        </div>
+    </div>
     {% endfor %}
+{% endblock %}
+
+{% block buttons_list %}
+
 {% endblock %}
 
 {% block javascript %}

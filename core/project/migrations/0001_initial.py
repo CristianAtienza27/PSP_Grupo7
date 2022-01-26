@@ -9,9 +9,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('employee', '0001_initial'),
         ('category', '0001_initial'),
-        ('client', '0004_auto_20220120_0815'),
     ]
 
     operations = [
@@ -26,7 +24,7 @@ class Migration(migrations.Migration):
                 ('fechaFin', models.DateField(verbose_name='fechaFin')),
                 ('informeFinal', models.CharField(max_length=255, verbose_name='informeFinal')),
                 ('categoria', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='categoria', to='category.category', verbose_name='idCategoria')),
-                ('empleado', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='empleado', to='employee.employee', verbose_name='idEmpleado')),
+                ('empleado', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='empleado', to='user.user', verbose_name='idEmpleado')),
             ],
         ),
         migrations.CreateModel(
@@ -35,7 +33,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('fechaInscripcion', models.DateField(verbose_name='fechaInscripcion')),
                 ('rol', models.CharField(max_length=100, verbose_name='rol')),
-                ('cliente', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='cliente', to='client.client', verbose_name='idCliente')),
+                ('cliente', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='cliente', to='user.user', verbose_name='idCliente')),
                 ('proyecto', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='proyecto', to='project.proyecto', verbose_name='idProyecto')),
             ],
         ),

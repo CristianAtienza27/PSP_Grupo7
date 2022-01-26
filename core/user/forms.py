@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 
 from core.user.models import User
 
-class UserForm(ModelForm):
+class UserForm(UserCreationForm):
     # def __init__(self, *args, **kwargs):
     #     super().__init__(*args, **kwargs)
         # self.fields['first_name'].widget.attrs['autofocus'] = True
@@ -35,9 +35,9 @@ class UserForm(ModelForm):
 
         exclude = ['groups', 'user_permissions', 'last_login', 'date_joined', 'is_superuser', 'is_active', 'is_staff']
 
-    # def save(self, commit=True):
-    #     user = super(UserForm, self).save(commit=False)
-    #     user.set_password(self.cleaned_data["password1"])
-    #     if commit:
-    #         user.save()
-    #     return user
+    def save(self, commit=True):
+        user = super(UserForm, self).save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user

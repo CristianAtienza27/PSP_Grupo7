@@ -1,9 +1,9 @@
 from django.urls import path
-from core.client.views import *
+from core.employee.views import *
 
 app_name = 'employee'
 
 urlpatterns = [
-    # path('add/', ClientCreateView.as_view(), name='client_create'),
-    # path('update/<int:pk>/', ClientUpdateView.as_view(), name='client_update'),
+    path('add/', EmployeeCreateView.as_view(), name='client_create'),
+    path('update/<int:pk>/', EmployeeUpdateView.as_view(), name='client_update'),
 ]

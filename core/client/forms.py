@@ -1,11 +1,11 @@
 from django.forms import *
-from core.client.models import Client
+from core.user.models import User
 
 class ClientForm(ModelForm):
 
     class Meta:
-        model = Client
-        fields = ('nombre','apellidos','dni','direccion','fechaNacimiento')
+        model = User
+        fields = ('nombre','apellidos','dni','direccion','fechaNacimiento','email','username','password')
         widgets = {
             'nombre': TextInput(
                 attrs={
@@ -32,6 +32,29 @@ class ClientForm(ModelForm):
                     'placeholder': 'Ingrese su fecha de nacimiento',
                     'type': 'date'
                 }
-            )
+            ),
+            'username': TextInput(
+                attrs={
+                    'placeholder': 'Ingrese su nombre de usuario',
+                }
+            ),
+            'email': EmailInput(
+                attrs={
+                    'placeholder': 'Ingrese su email',
+                }
+            ),
+            'password': PasswordInput(
+                attrs={
+                    'placeholder': 'Ingrese su contraseña',
+                }
+            ),
+
         }
+
+    def save(self, commit=True):
+        user = super(ClientForm, self).save(commit=False)
+        user.set_password(self.cleaned_data["password"])
+        if commit:
+            user.save()
+        return user
 #Formularios 
