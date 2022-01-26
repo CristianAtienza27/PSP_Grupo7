@@ -59,6 +59,12 @@
                     <p>Datos Personales</p>
                 </a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'project:project_inscription' %}">
+                    <i class="far fa-circle nav-icon" aria-hidden="true"></i>
+                    <p>Proyectos</p>
+                </a>
+              </li>
               {% elif request.user.role_user == 'Empleado' %}
               <li class="nav-item">
                 <a class="nav-link" href="{% url 'adm:employee_update' pk=request.user.id %}">

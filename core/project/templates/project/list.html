@@ -5,34 +5,31 @@
 {% endblock %}
 
 {% block columns %}
-    <!-- <tr>
+    <tr>
         <th scope="col" style="width: 15%;">Nombre</th>
+        <th scope="col" style="width: 15%;">Descripción</th>
+        <th scope="col" style="width: 15%;">Nivel</th>
+        <th scope="col" style="width: 15%;">Periodo</th>
+        <th scope="col" style="width: 15%;">Informe Final</th>
+        <th scope="col" style="width: 15%;">Empleado</th>
         <th scope="col" style="width: 15%;">Categoría</th>
-    </tr> -->
+    </tr>
 {% endblock %}
 
 {% block rows %}
     {% for project in projects %}
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        <div class="col">
-          <div class="card h-100">
-            <img src="{{project.categoria.foto.url}}" width="50" height="150" class="card-img-top" alt="...">
-            <div class="card-body">
-              <h5 class="card-title">{{ project.titulo}}</h5>
-              <p class="card-text">Nivel: {{ project.nivel }}</p>
-              <p class="card-text">{{ project.descripcion }}</p>
-            </div>
-            <div class="card-footer">
-              <small class="text-muted">Del {{ project.fechaInicio}} al {{ project.fechaFin }}</small>
-            </div>
-          </div>
-        </div>
-    </div>
+    <tr>
+        <td>{{ project.titulo }}</td>
+        <td>{{ project.descripcion }}</td>
+        <td>{{ project.nivel }}</td>
+        <td>{{ project.fechaInicio }} - {{ project.fechaFin }} </td>
+        <td>{{ project.informeFinal }}</td>
+        <td>{{ project.empleado.nombre }}</td>
+        <td>{{ project.categoria.nombre }}</td>
+        <td><a href="{% url 'project:project_update' pk=project.id %}" class="btn btn-warning btn-flat">Editar</a>
+            <a href="{% url 'project:project_delete' pk=project.id %}" class="btn btn-danger btn-flat">Eliminar</a></td>
+    </tr>
     {% endfor %}
-{% endblock %}
-
-{% block buttons_list %}
-
 {% endblock %}
 
 {% block javascript %}

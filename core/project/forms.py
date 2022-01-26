@@ -1,5 +1,5 @@
 from django.forms import *
-from core.project.models import Project
+from core.project.models import Project, Participa
 
 class ProjectForm(ModelForm):
 
@@ -34,3 +34,10 @@ class ProjectForm(ModelForm):
             )
                    
         }
+
+# class InscriptionForm(ModelForm):
+#     class Meta:
+#         model = Participa
+#         fields = "__all__"
+
+                   

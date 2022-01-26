@@ -14,7 +14,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from core.mixins import ValidatePermissionRequiredMixin
 
 @method_decorator(is_admin, name="dispatch")
-class ClientListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, ListView):
+class ClientListView(LoginRequiredMixin, ListView):
     model = User
     template_name = 'client/list.html'
     # permission_required = '.view_client'
@@ -52,6 +52,20 @@ class ClientCreateView(CreateView):
         context['list_url'] = self.success_url
         context['action'] = 'add'
         return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            client = form.save(commit=False)
+            client.role_user = 'Cliente'
+            client.save()
+            messages.success(request, 'Cliente registrado con éxito')
+            return HttpResponseRedirect(self.success_url)
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
+
     
     def get_success_url(self):
         messages.success(self.request, 'Cliente registrado con éxito')
@@ -98,4 +112,3 @@ class ClientDeleteView(LoginRequiredMixin, DeleteView):
         messages.success(self.request, 'Cliente eliminado con éxito')
         return reverse('adm:client_list')
 
-#Vista de consultar

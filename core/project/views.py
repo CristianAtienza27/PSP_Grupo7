@@ -5,7 +5,7 @@ from core.client.forms import ClientForm
 from core.project.forms import ProjectForm
 from core.user.models import User
 from core.category.models import Category
-from core.project.models import Project
+from core.project.models import Project, Participa
 from core.employee.forms import EmployeeForm
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
@@ -78,3 +78,32 @@ class ProjectDeleteView(LoginRequiredMixin, DeleteView):
         context['title'] = 'Eliminación de Categoría'
         context['list_url'] = self.success_url
         return context
+
+class ProjectInscriptionView(LoginRequiredMixin, ListView):
+    model = Participa
+    template_name = 'project/listC.html'
+    # permission_required = '.view_client'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Listado de Proyectos'
+        context['projects'] = Project.objects.all()
+        context['create_url'] = reverse_lazy('project:project_inscription')
+        return context
+
+def InscriptionCreate(request,pk):
+    
+    project = Project.objects.filter(pk=pk)
+    messages.success(request, 'Cliente activado con éxito')
+    url = reverse('project/inscription')
+    return HttpResponseRedirect(url)
+
+    
+    # permission_required = '.view_client'
+
+    # def get_context_data(self, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context['title'] = 'Listado de Proyectos'
+    #     context['projects'] = Project.objects.all()
+    #     context['create_url'] = reverse_lazy('project:project_inscription')
+    #     return context
