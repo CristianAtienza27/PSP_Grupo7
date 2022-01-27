@@ -17,6 +17,8 @@ from core.mixins import ValidatePermissionRequiredMixin
 from core.decorators import *
 from django.utils.decorators import method_decorator
 
+#UTIL: https://docs.djangoproject.com/en/4.0/topics/class-based-views/generic-display/
+
 # Create your views here.
 class ProjectListView(LoginRequiredMixin, ListView):
     #model = Project
@@ -76,7 +78,9 @@ class ProjectDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         messages.success(self.request, 'Proyecto eliminado con éxito')
-        return reverse(self.success_url)
+        #esto no funciona 
+        #return reverse(self.success_url)
+        return reverse('project:project_list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
