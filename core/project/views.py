@@ -14,24 +14,28 @@ from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from core.mixins import ValidatePermissionRequiredMixin
 
+from core.decorators import *
+from django.utils.decorators import method_decorator
+
 # Create your views here.
 class ProjectListView(LoginRequiredMixin, ListView):
-    model = Project
+    #model = Project
     template_name = 'project/list.html'
-    # permission_required = '.view_client'
-
+    
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Listado de Proyectos'
-        context['projects'] = Project.objects.all()
+        context['projects'] = Project.objects.filter(empleado=self.request.user)
         context['create_url'] = reverse_lazy('project:project_create')
         return context
+    
+    def get_queryset(self):
+        return Project.objects.filter(empleado=self.request.user)
 
 class ProjectCreateView(LoginRequiredMixin, CreateView):
     model = Project
     form_class = ProjectForm
     template_name = 'project/create.html'
-    # permission_required = '.view_client'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -42,7 +46,8 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         messages.success(self.request, 'Proyecto registrado con éxito')
         return reverse('project:project_list')
-
+    
+@method_decorator(owns_project, name="dispatch")
 class ProjectUpdateView(LoginRequiredMixin, UpdateView):
     model = Project
     form_class = ProjectForm
@@ -58,11 +63,11 @@ class ProjectUpdateView(LoginRequiredMixin, UpdateView):
         messages.success(self.request, 'Proyecto actualizado con éxito')
         return reverse('project:project_list')
 
+@method_decorator(owns_project, name="dispatch")
 class ProjectDeleteView(LoginRequiredMixin, DeleteView):
-    model = Category
+    model = Project
     template_name = 'project/delete.html'
     success_url = reverse_lazy('project:project_list')
-    # permission_required = 'adm..delete_client'
     url_redirect = success_url
 
     def dispatch(self, request, *args, **kwargs):
@@ -75,14 +80,25 @@ class ProjectDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Eliminación de Categoría'
+        context['title'] = 'Eliminación de Proyecto'
         context['list_url'] = self.success_url
         return context
+    
+class ProjectHistoryView(LoginRequiredMixin, DeleteView):
+    template_name = 'project/list.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Historial de Proyectos'
+        context['projects'] = Project.objects.filter(empleado=self.request.user)
+        return context
+    
+    def get_queryset(self):
+        return Project.objects.filter(empleado=self.request.user)
 
 class ProjectInscriptionView(LoginRequiredMixin, ListView):
     model = Participa
     template_name = 'project/listC.html'
-    # permission_required = '.view_client'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -97,9 +113,6 @@ def InscriptionCreate(request,pk):
     messages.success(request, 'Cliente activado con éxito')
     url = reverse('project/inscription')
     return HttpResponseRedirect(url)
-
-    
-    # permission_required = '.view_client'
 
     # def get_context_data(self, **kwargs):
     #     context = super().get_context_data(**kwargs)

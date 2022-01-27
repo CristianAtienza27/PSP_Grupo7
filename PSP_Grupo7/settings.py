@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'core.employee',
     'core.category',
     'core.project',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
