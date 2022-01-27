@@ -47,7 +47,7 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
         messages.success(self.request, 'Proyecto registrado con éxito')
         return reverse('project:project_list')
     
-@method_decorator(same_user, name="dispatch")
+@method_decorator(owns_project, name="dispatch")
 class ProjectUpdateView(LoginRequiredMixin, UpdateView):
     model = Project
     form_class = ProjectForm
@@ -63,9 +63,9 @@ class ProjectUpdateView(LoginRequiredMixin, UpdateView):
         messages.success(self.request, 'Proyecto actualizado con éxito')
         return reverse('project:project_list')
 
-@method_decorator(same_user, name="dispatch")
+@method_decorator(owns_project, name="dispatch")
 class ProjectDeleteView(LoginRequiredMixin, DeleteView):
-    model = Category
+    model = Project
     template_name = 'project/delete.html'
     success_url = reverse_lazy('project:project_list')
     url_redirect = success_url
@@ -80,9 +80,21 @@ class ProjectDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Eliminación de Categoría'
+        context['title'] = 'Eliminación de Proyecto'
         context['list_url'] = self.success_url
         return context
+    
+class ProjectHistoryView(LoginRequiredMixin, DeleteView):
+    template_name = 'project/list.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Historial de Proyectos'
+        context['projects'] = Project.objects.filter(empleado=self.request.user)
+        return context
+    
+    def get_queryset(self):
+        return Project.objects.filter(empleado=self.request.user)
 
 class ProjectInscriptionView(LoginRequiredMixin, ListView):
     model = Participa
