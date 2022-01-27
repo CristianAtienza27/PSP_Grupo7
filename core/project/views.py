@@ -76,7 +76,9 @@ class ProjectDeleteView(LoginRequiredMixin, DeleteView):
 
     def get_success_url(self):
         messages.success(self.request, 'Proyecto eliminado con éxito')
-        return reverse(self.success_url)
+        #esto no funciona 
+        #return reverse(self.success_url)
+        return reverse('project:project_list')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
