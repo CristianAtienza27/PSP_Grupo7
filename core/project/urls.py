@@ -10,7 +10,8 @@ urlpatterns = [
     path('project/delete/<int:pk>/', ProjectDeleteView.as_view(), name='project_delete'),
     path('project/inscription/', ProjectInscriptionView.as_view(), name="project_inscription"),
     path('projetct/inscription/create', InscriptionCreate, name="project_inscription_create"),
-    path('history/', ProjectHistoryView.as_view(), name='project_history')
+    path('history/', ProjectHistoryView.as_view(), name='project_history'),
+    path('my-projects/', EmployeeProjectsView.as_view(), name='employee_projects')
 ]
 
     #Categorías

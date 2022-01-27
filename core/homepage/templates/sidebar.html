@@ -73,9 +73,15 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'project:project_list' %}">
+                <a class="nav-link" href="{% url 'project:employee_projects' %}">
                     <i class="far fa-circle nav-icon" aria-hidden="true"></i>
                     <p>Proyectos</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'project:project_history' %}">
+                    <i class="far fa-circle nav-icon" aria-hidden="true"></i>
+                    <p>Historial Proyectos</p>
                 </a>
               </li>
               {% endif %}

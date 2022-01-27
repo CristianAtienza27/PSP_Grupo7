@@ -1,3 +1,4 @@
+from datetime import datetime
 from django.shortcuts import render
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from django.urls import reverse_lazy,reverse
@@ -18,21 +19,20 @@ from core.decorators import *
 from django.utils.decorators import method_decorator
 
 #UTIL: https://docs.djangoproject.com/en/4.0/topics/class-based-views/generic-display/
+#Para las consultas : https://docs.djangoproject.com/en/4.0/ref/models/querysets
 
 # Create your views here.
 class ProjectListView(LoginRequiredMixin, ListView):
-    #model = Project
+    model = Project
     template_name = 'project/list.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context['title'] = 'Listado de Proyectos'
-        context['projects'] = Project.objects.filter(empleado=self.request.user)
+        context['projects'] = Project.objects.all()
         context['create_url'] = reverse_lazy('project:project_create')
         return context
-    
-    def get_queryset(self):
-        return Project.objects.filter(empleado=self.request.user)
 
 class ProjectCreateView(LoginRequiredMixin, CreateView):
     model = Project
@@ -88,7 +88,7 @@ class ProjectDeleteView(LoginRequiredMixin, DeleteView):
         context['list_url'] = self.success_url
         return context
     
-class ProjectHistoryView(LoginRequiredMixin, DeleteView):
+class EmployeeProjectsView(LoginRequiredMixin, ListView):
     template_name = 'project/list.html'
     
     def get_context_data(self, **kwargs):
@@ -100,6 +100,18 @@ class ProjectHistoryView(LoginRequiredMixin, DeleteView):
     def get_queryset(self):
         return Project.objects.filter(empleado=self.request.user)
 
+class ProjectHistoryView(LoginRequiredMixin, ListView):
+    template_name = 'project/list.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Historial de Proyectos'
+        context['projects'] = Project.objects.filter(empleado=self.request.user, fechaFin__lt = datetime.now() )
+        return context
+    
+    def get_queryset(self):
+        return Project.objects.filter(empleado=self.request.user, fechaFin__lt = datetime.now() )
+    
 class ProjectInscriptionView(LoginRequiredMixin, ListView):
     model = Participa
     template_name = 'project/listC.html'
