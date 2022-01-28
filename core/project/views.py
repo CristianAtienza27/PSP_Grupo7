@@ -10,7 +10,7 @@ from core.employee.forms import EmployeeForm
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponseRedirect, JsonResponse
-
+from datetime import datetime
 from django.contrib.auth.mixins import LoginRequiredMixin
 from core.mixins import ValidatePermissionRequiredMixin
 
@@ -31,7 +31,6 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
     model = Project
     form_class = ProjectForm
     template_name = 'project/create.html'
-    # permission_required = '.view_client'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -86,24 +85,63 @@ class ProjectInscriptionView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        idProj = []
+        inscripciones = Participa.objects.filter(cliente_id=self.request.user.id)
+        for insc in inscripciones:
+            idProj.append(insc.proyecto.pk)
+        projects = Project.objects.exclude(pk__in = idProj)
+
+        context['projects'] = projects
         context['title'] = 'Listado de Proyectos'
-        context['projects'] = Project.objects.all()
+        
         context['create_url'] = reverse_lazy('project:project_inscription')
         return context
 
+class ProjectInscriptionView(LoginRequiredMixin, ListView):
+    model = Participa
+    template_name = 'project/listC.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        idProj = []
+        inscripciones = Participa.objects.filter(cliente_id=self.request.user.id)
+        for insc in inscripciones:
+            idProj.append(insc.proyecto.pk)
+
+        categoria = self.request.GET.get('category', None)
+        fechaIni = self.request.GET.get('fechaIni',None)
+        fechaFin = self.request.GET.get('fechaFin',None)
+
+        if categoria is not None and fechaIni != '' and fechaFin != '':
+            projects = Project.objects.filter(categoria_id=categoria,fechaInicio__lte=fechaIni,fechaFin__gte=fechaFin).exclude(pk__in = idProj)
+        elif fechaIni != '' and fechaFin != '':
+            projects = Project.objects.filter(fechaInicio=fechaIni).filter(fechaFin=fechaFin).exclude(pk__in = idProj)
+        elif categoria is not None and categoria != '0':
+            projects = Project.objects.filter(categoria_id=categoria).exclude(pk__in = idProj)
+        else:
+            projects = Project.objects.filter().exclude(pk__in = idProj)
+
+        context['projects'] = projects
+        context['categories'] = Category.objects.all()
+        context['title'] = 'Listado de Proyectos'
+        
+        context['create_url'] = reverse_lazy('project:project_inscription')
+        return context    
+
 def InscriptionCreate(request,pk):
+    project = Project.objects.filter(pk=pk).first()
+
+    if project is not None:
+        inscripcion = Participa()
+        inscripcion.cliente = request.user
+        inscripcion.proyecto = project
+        inscripcion.fechaInscripcion = datetime.today()
+        inscripcion.save()
+
+        messages.success(request, 'Inscripción en proyecto con éxito')
+    else:
+        messages.success(request, 'Error al realizar la inscripción')
     
-    project = Project.objects.filter(pk=pk)
-    messages.success(request, 'Cliente activado con éxito')
-    url = reverse('project/inscription')
+    url = reverse('project:project_inscription')
     return HttpResponseRedirect(url)
-
-    
-    # permission_required = '.view_client'
-
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['title'] = 'Listado de Proyectos'
-    #     context['projects'] = Project.objects.all()
-    #     context['create_url'] = reverse_lazy('project:project_inscription')
-    #     return context

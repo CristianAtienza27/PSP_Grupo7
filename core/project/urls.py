@@ -9,7 +9,7 @@ urlpatterns = [
     path('project/update/<int:pk>/', ProjectUpdateView.as_view(), name='project_update'),
     path('project/delete/<int:pk>/', ProjectDeleteView.as_view(), name='project_delete'),
     path('project/inscription/', ProjectInscriptionView.as_view(), name="project_inscription"),
-    path('projetct/inscription/create', InscriptionCreate, name="project_inscription_create")
+    path('projetct/inscription/create/<int:pk>', InscriptionCreate, name="project_inscription_create")
 ]
 
     #Categorías

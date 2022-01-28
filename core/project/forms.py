@@ -24,13 +24,15 @@ class ProjectForm(ModelForm):
             ),
             'fechaInicio': DateInput(
                 attrs={
-                   'type': 'date'
-                }
+                   'type': 'date',
+                },
+                format=('%Y-%m-%d')
             ),
             'fechaFin': DateInput(
                 attrs={
                    'type': 'date'
-                }
+                },
+                format=('%Y-%m-%d')
             )
                    
         }

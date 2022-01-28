@@ -14,9 +14,12 @@ class Project(models.Model):
 
     def __str__(self):
         return self.titulo
-
+    
 class Participa(models.Model):
-    cliente = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='idCliente', related_name='cliente')
-    proyecto = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name='idProyecto', related_name='proyecto')
-    fechaInscripcion = models.DateField(verbose_name='fechaInscripcion')
-    rol = models.CharField(max_length=100, verbose_name='rol')
+    cliente = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Cliente', related_name='cliente')
+    proyecto = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name='Proyecto')
+    fechaInscripcion = models.DateField(verbose_name='Fecha de inscripción')
+    rol = models.CharField(max_length=100, verbose_name='Rol', null=True, blank=True)
+
+    def __str__(self):
+        return self.cliente + ' ' + self.proyecto + ' ' + self.fechaInscripcion + ' ' + self.rol
