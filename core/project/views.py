@@ -118,24 +118,6 @@ class ProjectInscriptionView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        idProj = []
-        inscripciones = Participa.objects.filter(cliente_id=self.request.user.id)
-        for insc in inscripciones:
-            idProj.append(insc.proyecto.pk)
-        projects = Project.objects.exclude(pk__in = idProj)
-
-        context['projects'] = projects
-        context['title'] = 'Listado de Proyectos'
-        
-        context['create_url'] = reverse_lazy('project:project_inscription')
-        return context
-
-class ProjectInscriptionView(LoginRequiredMixin, ListView):
-    model = Participa
-    template_name = 'project/listC.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
 
         idProj = []
         inscripciones = Participa.objects.filter(cliente_id=self.request.user.id)
@@ -145,9 +127,11 @@ class ProjectInscriptionView(LoginRequiredMixin, ListView):
         categoria = self.request.GET.get('category', None)
         fechaIni = self.request.GET.get('fechaIni',None)
         fechaFin = self.request.GET.get('fechaFin',None)
-
+        
         if categoria is not None and fechaIni != '' and fechaFin != '':
             projects = Project.objects.filter(categoria_id=categoria,fechaInicio__lte=fechaIni,fechaFin__gte=fechaFin).exclude(pk__in = idProj)
+        elif fechaIni is None and fechaFin is None:
+            projects = Project.objects.filter().exclude(pk__in = idProj)
         elif fechaIni != '' and fechaFin != '':
             projects = Project.objects.filter(fechaInicio=fechaIni).filter(fechaFin=fechaFin).exclude(pk__in = idProj)
         elif categoria is not None and categoria != '0':
