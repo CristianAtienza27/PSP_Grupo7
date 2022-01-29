@@ -23,14 +23,17 @@ from django.utils.decorators import method_decorator
 
 # Create your views here.
 class ProjectListView(LoginRequiredMixin, ListView):
+    paginate_by = 5
+    page_kwarg = 'page'
+    status_kwarg = 'status'
     model = Project
+    ordering = ['id']
     template_name = 'project/list.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context = super().get_context_data(**kwargs)
         context['title'] = 'Listado de Proyectos'
-        context['projects'] = Project.objects.all()
+        context['projects'] = Project.objects.filter(empleado=self.request.user).order_by('id')
         context['create_url'] = reverse_lazy('project:project_create')
         return context
 
@@ -87,21 +90,9 @@ class ProjectDeleteView(LoginRequiredMixin, DeleteView):
         context['title'] = 'Eliminación de Proyecto'
         context['list_url'] = self.success_url
         return context
-    
-class EmployeeProjectsView(LoginRequiredMixin, ListView):
-    template_name = 'project/list.html'
-    
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Historial de Proyectos'
-        context['projects'] = Project.objects.filter(empleado=self.request.user)
-        return context
-    
-    def get_queryset(self):
-        return Project.objects.filter(empleado=self.request.user)
 
 class ProjectHistoryView(LoginRequiredMixin, ListView):
-    template_name = 'project/list.html'
+    template_name = 'project/listP.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -127,7 +118,7 @@ class ProjectInscriptionView(LoginRequiredMixin, ListView):
         categoria = self.request.GET.get('category', None)
         fechaIni = self.request.GET.get('fechaIni',None)
         fechaFin = self.request.GET.get('fechaFin',None)
-        
+
         if categoria is not None and fechaIni != '' and fechaFin != '':
             projects = Project.objects.filter(categoria_id=categoria,fechaInicio__lte=fechaIni,fechaFin__gte=fechaFin).exclude(pk__in = idProj)
         elif fechaIni is None and fechaFin is None:
@@ -145,6 +136,23 @@ class ProjectInscriptionView(LoginRequiredMixin, ListView):
         
         context['create_url'] = reverse_lazy('project:project_inscription')
         return context    
+
+# @method_decorator(owns_project, name="dispatch")
+@method_decorator(owns_project, name="dispatch")
+class ProjectClientsView(LoginRequiredMixin, ListView):
+    paginate_by = 5
+    page_kwarg = 'page'
+    status_kwarg = 'status'
+    model = User
+    ordering = ['pk']
+    template_name = 'project/listPC.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Cliente en este proyecto'       
+        context['page_obj'] = Participa.objects.filter(proyecto_id=self.kwargs.get('pk'))       
+        print(context['page_obj'])
+        return context
 
 def InscriptionCreate(request,pk):
     project = Project.objects.filter(pk=pk).first()

@@ -1,0 +1,40 @@
+{% extends 'list.html' %}
+{% load static %}
+{% block head_list %}
+
+{% endblock %}
+
+{% block columns %}
+
+{% endblock %}
+
+{% block rows %}
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      {% for client in page_obj %}
+        <div class="col">
+          <div class="card h-100">
+            <!-- <img src="{{project.categoria.foto.url}}" width="50" height="150" class="card-img-top" alt="..."> -->
+            <div class="card-body">
+              <h5 class="card-title">{{ client.cliente.nombre }} {{ client.cliente.apellidos }}</h5>
+              <p class="card-text">Email: {{ client.cliente.email }}</p>
+              <p class="card-text">Dirección: {{ client.cliente.direccion }}</p>
+            </div>
+            <div class="card-footer">
+              <!-- <small class="text-muted">Del {{ project.fechaInicio}} al {{ project.fechaFin }}</small> -->
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      {% if page_obj.count == 0 %}
+      <h5>No hay clientes en este proyecto</h5>
+      {% endif %}
+    </div>
+{% endblock %}
+
+{% block buttons_list %}
+
+{% endblock %}
+
+{% block javascript %}
+
+{% endblock %}

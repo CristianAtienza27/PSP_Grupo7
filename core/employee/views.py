@@ -37,7 +37,7 @@ class EmployeeListView(LoginRequiredMixin, ValidatePermissionRequiredMixin, List
         return context
 
 @method_decorator(is_admin, name="dispatch")
-class EmployeeCreateView(CreateView):
+class EmployeeCreateView(LoginRequiredMixin, CreateView):
     model = User
     form_class = EmployeeForm
     template_name = 'employee/create.html'
@@ -69,7 +69,7 @@ class EmployeeCreateView(CreateView):
         return reverse('adm:employee_list')
     
 
-class EmployeeUpdateView(UpdateView):
+class EmployeeUpdateView(LoginRequiredMixin, UpdateView):
     model = User
     form_class = EmployeeForm
     template_name = 'employee/create.html'
@@ -87,7 +87,7 @@ class EmployeeUpdateView(UpdateView):
         messages.success(self.request, 'Empleado actualizado con éxito')
         return reverse('adm:employee_list')
 
-class EmployeeDeleteView(DeleteView):
+class EmployeeDeleteView(LoginRequiredMixin,DeleteView):
     model = User
     template_name = 'employee/delete.html'
     success_url = reverse_lazy('adm:employee_list')
@@ -106,6 +106,9 @@ class EmployeeDeleteView(DeleteView):
     def get_success_url(self):
         messages.success(self.request, 'Empleado eliminado con éxito')
         return reverse('adm:employee_list')
+
+
+# class EmployeeClientsView(LoginRequiredMixin,ListView):
 
 #Api REST
 class Employees_APIView(APIView):

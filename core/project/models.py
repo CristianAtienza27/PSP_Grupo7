@@ -21,5 +21,5 @@ class Participa(models.Model):
     fechaInscripcion = models.DateField(verbose_name='Fecha de inscripción')
     rol = models.CharField(max_length=100, verbose_name='Rol', null=True, blank=True)
 
-    def __str__(self):
-        return self.cliente + ' ' + self.proyecto + ' ' + self.fechaInscripcion + ' ' + self.rol
+    # def __str__(self):
+    #     return self.fechaInscripcion + ' ' + self.rol
