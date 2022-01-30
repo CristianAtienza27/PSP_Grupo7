@@ -91,18 +91,35 @@ class ProjectDeleteView(LoginRequiredMixin, DeleteView):
         context['list_url'] = self.success_url
         return context
 
-class ProjectHistoryView(LoginRequiredMixin, ListView):
+class ProjectHistoryEmployeeView(LoginRequiredMixin, ListView):
     template_name = 'project/listP.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Historial de Proyectos'
         context['projects'] = Project.objects.filter(empleado=self.request.user, fechaFin__lt = datetime.now() )
+    
+    def get_queryset(self):
+        return Project.objects.filter(empleado=self.request.user, fechaFin__lt = datetime.now() )
+
+class ProjectHistoryClientView(LoginRequiredMixin, ListView):
+    template_name = 'project/listPH.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Historial de Proyectos'
+        inscripciones = Participa.objects.filter(cliente_id=self.request.user.id)
+        context['fechaActual'] = datetime.now()
+        context['projects'] = inscripciones
+        print(inscripciones.proyecto)
+
+        for insc in inscripciones:
+            print(insc.proyecto.fechaFin)
         return context
     
     def get_queryset(self):
         return Project.objects.filter(empleado=self.request.user, fechaFin__lt = datetime.now() )
-    
+
 class ProjectInscriptionView(LoginRequiredMixin, ListView):
     model = Participa
     template_name = 'project/listC.html'

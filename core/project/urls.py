@@ -10,7 +10,8 @@ urlpatterns = [
     path('delete/<int:pk>/', ProjectDeleteView.as_view(), name='project_delete'),
     path('inscription/', ProjectInscriptionView.as_view(), name="project_inscription"),
     path('inscription/create/<int:pk>', InscriptionCreate, name="project_inscription_create"),
-    path('history/', ProjectHistoryView.as_view(), name='project_history'),
+    path('employe/history/', ProjectHistoryEmployeeView.as_view(), name='project_employee_history'),
+    path('client/history/', ProjectHistoryClientView.as_view(), name='project_client_history'),
     path('clients/<int:pk>', ProjectClientsView.as_view(), name='project_clients')
 ]
 
