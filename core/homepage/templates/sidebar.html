@@ -54,9 +54,15 @@
               </li>
               {% elif request.user.role_user == 'Cliente' %}
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'client:client_update' pk=request.user.id %}">
+                <a class="nav-link" href="{% url 'project:project_inscription' %}">
                     <i class="far fa-circle nav-icon" aria-hidden="true"></i>
-                    <p>Datos Personales</p>
+                    <p>Proyectos</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'project:project_nexts' %}">
+                    <i class="far fa-circle nav-icon" aria-hidden="true"></i>
+                    <p>Próximos Proyectos</p>
                 </a>
               </li>
               <li class="nav-item">
@@ -66,9 +72,9 @@
                 </a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'project:project_inscription' %}">
+                <a class="nav-link" href="{% url 'client:client_update' pk=request.user.id %}">
                     <i class="far fa-circle nav-icon" aria-hidden="true"></i>
-                    <p>Proyectos</p>
+                    <p>Datos Personales</p>
                 </a>
               </li>
               {% elif request.user.role_user == 'Empleado' %}

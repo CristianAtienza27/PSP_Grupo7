@@ -11,7 +11,7 @@ from core.employee.forms import EmployeeForm
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponseRedirect, JsonResponse
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.contrib.auth.mixins import LoginRequiredMixin
 from core.mixins import ValidatePermissionRequiredMixin
 
@@ -103,22 +103,28 @@ class ProjectHistoryEmployeeView(LoginRequiredMixin, ListView):
         return Project.objects.filter(empleado=self.request.user, fechaFin__lt = datetime.now() )
 
 class ProjectHistoryClientView(LoginRequiredMixin, ListView):
-    template_name = 'project/listPH.html'
-    
+    template_name = 'project/listP.html'
+    model = Project
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Historial de Proyectos'
-        inscripciones = Participa.objects.filter(cliente_id=self.request.user.id)
-        context['fechaActual'] = datetime.now()
-        context['projects'] = inscripciones
-        print(inscripciones.proyecto)
-
-        for insc in inscripciones:
-            print(insc.proyecto.fechaFin)
+        projects = Project.objects.filter(participa__cliente = self.request.user, fechaFin__lt = datetime.now())
+        context['projects'] = projects
         return context
-    
-    def get_queryset(self):
-        return Project.objects.filter(empleado=self.request.user, fechaFin__lt = datetime.now() )
+
+class ProjectNext(LoginRequiredMixin, ListView):
+    template_name = 'project/listP.html'
+    model = Project
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Próximos Proyectos'
+        projects = Project.objects.filter(fechaInicio__gte = (datetime.strftime((datetime.today() + timedelta(days=-datetime.today().weekday(), weeks=1)), '%Y-%m-%d')))
+        context['projects'] = projects
+        return context
+        
+        # print(datetime.strftime((datetime.today() + timedelta(days=-datetime.today().weekday(), weeks=1)), '%Y-%m-%d')) 
 
 class ProjectInscriptionView(LoginRequiredMixin, ListView):
     model = Participa
@@ -154,7 +160,6 @@ class ProjectInscriptionView(LoginRequiredMixin, ListView):
         context['create_url'] = reverse_lazy('project:project_inscription')
         return context    
 
-# @method_decorator(owns_project, name="dispatch")
 @method_decorator(owns_project, name="dispatch")
 class ProjectClientsView(LoginRequiredMixin, ListView):
     paginate_by = 5
