@@ -93,14 +93,13 @@ class ProjectDeleteView(LoginRequiredMixin, DeleteView):
 
 class ProjectHistoryEmployeeView(LoginRequiredMixin, ListView):
     template_name = 'project/listP.html'
-    
+    model = Project
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Historial de Proyectos'
         context['projects'] = Project.objects.filter(empleado=self.request.user, fechaFin__lt = datetime.now() )
-    
-    def get_queryset(self):
-        return Project.objects.filter(empleado=self.request.user, fechaFin__lt = datetime.now() )
+        return context
 
 class ProjectHistoryClientView(LoginRequiredMixin, ListView):
     template_name = 'project/listP.html'
@@ -156,7 +155,6 @@ class ProjectInscriptionView(LoginRequiredMixin, ListView):
         context['projects'] = projects
         context['categories'] = Category.objects.all()
         context['title'] = 'Listado de Proyectos'
-        
         context['create_url'] = reverse_lazy('project:project_inscription')
         return context    
 
@@ -165,7 +163,7 @@ class ProjectClientsView(LoginRequiredMixin, ListView):
     paginate_by = 5
     page_kwarg = 'page'
     status_kwarg = 'status'
-    model = User
+    model = Participa
     ordering = ['pk']
     template_name = 'project/listPC.html'
 
@@ -173,8 +171,15 @@ class ProjectClientsView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Cliente en este proyecto'       
         context['page_obj'] = Participa.objects.filter(proyecto_id=self.kwargs.get('pk'))       
-        print(context['page_obj'])
+        context['roles'] = Participa.ParticipaType
         return context
+    
+    def post(self, request, *args, **kwargs):
+        Participa.objects.filter(proyecto_id=self.kwargs.get('pk'), 
+        cliente_id=self.request.POST.get('cliente_id')).update(rol=self.request.POST.get('rol'))
+        messages.success(request, 'Rol asignado con éxito')
+        return HttpResponseRedirect(reverse('project:project_clients', kwargs={'pk': self.kwargs.get('pk')}))
+
 
 def InscriptionCreate(request,pk):
     project = Project.objects.filter(pk=pk).first()

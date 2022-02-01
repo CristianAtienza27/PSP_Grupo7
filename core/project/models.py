@@ -17,13 +17,14 @@ class Project(models.Model):
     
 class Participa(models.Model):
     class ParticipaType(models.TextChoices):
+        SinRol = 'Sin asignar', ('Sin asignar')
         BackEnd = 'Backend', ('Backend')
         FrontEnd = 'FrontEnd', ('FrontEnd')
         FullStack = 'Fullstack', ('Fullstack')
-    cliente = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Cliente', related_name='cliente')
+    cliente = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Cliente')
     proyecto = models.ForeignKey(Project, on_delete=models.CASCADE, verbose_name='Proyecto')
     fechaInscripcion = models.DateField(verbose_name='Fecha de inscripción')
-    rol = models.CharField(max_length=100, verbose_name='Rol', null=True, blank=True, choices=ParticipaType.choices)
+    rol = models.CharField(max_length=100,default=ParticipaType.SinRol, verbose_name='Rol', choices=ParticipaType.choices)
 
     # def __str__(self):
     #     return self.fechaInscripcion + ' ' + self.rol

@@ -19,10 +19,22 @@
               <p class="card-text">Email: {{ client.cliente.email }}</p>
               <p class="card-text">Dirección: {{ client.cliente.direccion }}</p>
             </div>
+            <form method='post'>
+              {% csrf_token %}
+              <input type="hidden" name="cliente_id" value="{{ client.cliente.id }}"/>
+              <div class="form-group">
+                <label style="margin-left: 20px">Rol: </label>
+              <select class="form-select" aria-label="Default select example" name="rol">
+                {% for rol in roles %}
+                <option {% if rol == client.rol %} selected {% endif %}>{{ rol }}</option>
+                {% endfor %}
+              </select>
+            </div>
             <div class="card-footer">
               <!-- <small class="text-muted">Del {{ project.fechaInicio}} al {{ project.fechaFin }}</small> -->
             </div>
-            <a href="#" class="btn btn-primary">Asignar Rol</a>
+            <button type="submit" class="btn btn-primary">Asignar Rol</button>
+          </form>
           </div>
         </div>
       {% endfor %}
