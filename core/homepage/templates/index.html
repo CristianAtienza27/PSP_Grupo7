@@ -27,7 +27,6 @@ scratch. This page gets rid of all links and provides the needed markup only.
 </head>
 <body class="hold-transition sidebar-mini">
 <div class="wrapper">
-
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
     <!-- Left navbar links -->
@@ -36,10 +35,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
         <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="index3.html" class="nav-link">Home</a>
+        <a href="{% url 'index' %}" class="nav-link">Home</a>
       </li>
       <li class="nav-item d-none d-sm-inline-block">
-        <a href="#" class="nav-link">Contact</a>
+        <a href="https://github.com/CristianAtienza27/PSP_Grupo7/tree/Entrega-2" class="nav-link">Contact</a>
       </li>
     </ul>
 
@@ -62,7 +61,39 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- /.content-header -->
 
     {% block content %}
-
+      <div class="card-group">
+        <div class="card">
+          <img src="{% static 'img/ofergest.png'%}" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title"><b>Sobre Nosotros</b></h5>
+            <p class="card-text">Empresa líder en el sector con mas de 10 años de experiencia en el mundo del desarrollo. Formamos a nuestros empleados con el propósito de tener a los profesionales más cualificados de nuestro sector.</p>
+          </div>
+          <div class="card-footer">
+          </div>
+        </div>
+        <div class="card">
+          <img src="{% static 'img/novedades.jpg'%}" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title"><b>Últimas Novedades</b></h5>
+            <p class="card-text"></p>
+            <p class="card-text">- Nuevos proyectos (DAM Y ASIR).</p>
+            <p class="card-text">- Nuevas incorporaciones en plantilla.</p>
+            <p class="card-text">- Mejoras en el departamento de clientes.</p>
+          </div>
+          <div class="card-footer">
+          </div>
+        </div>
+        <div class="card">
+          <img src="{% static 'img/github.png'%}" class="card-img-top" alt="...">
+          <div class="card-body">
+            <h5 class="card-title"><b>Nuestro Repositorio</b></h5>
+            <p class="card-text">Visita nuestro repositorio para ver nuestros últimos proyectos. Free Code, Free learn.</p>
+            <a href="https://github.com/CristianAtienza27/PSP_Grupo7/tree/Entrega-2">Ver repositorio</a>
+          </div>
+          <div class="card-footer">
+          </div>
+        </div>
+      </div>
     {% endblock %}
 
 </div>

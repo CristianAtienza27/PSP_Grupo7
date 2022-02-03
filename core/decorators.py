@@ -9,8 +9,6 @@ def same_user(func):
         user = User.objects.get(pk=pk)
         
         if not request.user.is_superuser:
-            print(user.id)
-            print(request.user.id)
             if not (user.id == request.user.id):
                 messages.success(request, 'Acción no permitida')
                 if request.user.role_user == 'Cliente':
@@ -25,7 +23,7 @@ def same_user(func):
 def is_admin(func):
     def check_and_call(request, *args, **kwargs):
 
-        if not (request.user.is_superuser):
+        if request.user.is_superuser == 0:
             messages.success(request, 'Acción no permitida')
             return HttpResponseRedirect('/')
 
@@ -52,6 +50,39 @@ def is_employee(func):
         return func(request, *args, **kwargs)
 
     return check_and_call
+
+def client_project(func):
+    def check_and_call(request, *args, **kwargs):
+        pk = kwargs['pk']
+        
+        project_owner = Project.objects.get(pk=pk).empleado
+        
+        if not request.user.role_user == 'Cliente':
+            if not (project_owner == request.user):
+                messages.success(request, 'Acción no permitida')
+                if request.user.role_user == 'Cliente':
+                    return HttpResponseRedirect('/')
+            
+        return func(request, *args, **kwargs)
+
+    return check_and_call
+
+def employee_project(func):
+    def check_and_call(request, *args, **kwargs):
+        pk = kwargs['pk']
+        
+        project_owner = Project.objects.get(pk=pk).empleado
+        
+        if not request.user.role_user == 'Cliente':
+            if not (project_owner == request.user):
+                messages.success(request, 'Acción no permitida')
+                if request.user.role_user == 'Cliente':
+                    return HttpResponseRedirect('/')
+            
+        return func(request, *args, **kwargs)
+
+    return check_and_call
+
 
 def owns_project(func):
     def check_and_call(request, *args, **kwargs):

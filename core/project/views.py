@@ -21,7 +21,7 @@ from django.utils.decorators import method_decorator
 #UTIL: https://docs.djangoproject.com/en/4.0/topics/class-based-views/generic-display/
 #Para las consultas : https://docs.djangoproject.com/en/4.0/ref/models/querysets
 
-# Create your views here.
+@method_decorator(is_employee, name="dispatch")
 class ProjectListView(LoginRequiredMixin, ListView):
     paginate_by = 5
     page_kwarg = 'page'
@@ -37,6 +37,7 @@ class ProjectListView(LoginRequiredMixin, ListView):
         context['create_url'] = reverse_lazy('project:project_create')
         return context
 
+@method_decorator(is_employee, name="dispatch")
 class ProjectCreateView(LoginRequiredMixin, CreateView):
     model = Project
     form_class = ProjectForm
@@ -60,11 +61,6 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
             return HttpResponseRedirect(reverse('project:project_list'))
         else:
             return self.render_to_response(self.get_context_data(form=form))
-        
-    
-    # def get_success_url(self):
-    #     messages.success(self.request, 'Proyecto registrado con éxito')
-    #     return reverse('project:project_list')
     
 @method_decorator(owns_project, name="dispatch")
 class ProjectUpdateView(LoginRequiredMixin, UpdateView):
@@ -105,6 +101,7 @@ class ProjectDeleteView(LoginRequiredMixin, DeleteView):
         context['list_url'] = self.success_url
         return context
 
+@method_decorator(is_employee, name="dispatch")
 class ProjectHistoryEmployeeView(LoginRequiredMixin, ListView):
     template_name = 'project/listP.html'
     model = Project
@@ -115,6 +112,7 @@ class ProjectHistoryEmployeeView(LoginRequiredMixin, ListView):
         context['projects'] = Project.objects.filter(empleado=self.request.user, fechaFin__lt = datetime.now() )
         return context
 
+@method_decorator(is_client, name="dispatch")
 class ProjectHistoryClientView(LoginRequiredMixin, ListView):
     template_name = 'project/listP.html'
     model = Project
@@ -126,6 +124,7 @@ class ProjectHistoryClientView(LoginRequiredMixin, ListView):
         context['projects'] = projects
         return context
 
+@method_decorator(is_client, name="dispatch")
 class ProjectNext(LoginRequiredMixin, ListView):
     template_name = 'project/listP.html'
     model = Project
@@ -136,9 +135,8 @@ class ProjectNext(LoginRequiredMixin, ListView):
         projects = Project.objects.filter(fechaInicio__gte = (datetime.strftime((datetime.today() + timedelta(days=-datetime.today().weekday(), weeks=1)), '%Y-%m-%d')))
         context['projects'] = projects
         return context
-        
-        # print(datetime.strftime((datetime.today() + timedelta(days=-datetime.today().weekday(), weeks=1)), '%Y-%m-%d')) 
 
+@method_decorator(is_client, name="dispatch")
 class ProjectInscriptionView(LoginRequiredMixin, ListView):
     model = Project
     template_name = 'project/listC.html'
@@ -193,7 +191,7 @@ class ProjectClientsView(LoginRequiredMixin, ListView):
         messages.success(request, 'Rol asignado con éxito')
         return HttpResponseRedirect(reverse('project:project_clients', kwargs={'pk': self.kwargs.get('pk')}))
 
-
+@method_decorator(is_client, name="dispatch")
 def InscriptionCreate(request,pk):
     project = Project.objects.filter(pk=pk).first()
 
