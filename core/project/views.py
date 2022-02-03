@@ -61,7 +61,7 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
             return HttpResponseRedirect(reverse('project:project_list'))
         else:
             return self.render_to_response(self.get_context_data(form=form))
-    
+ 
 @method_decorator(owns_project, name="dispatch")
 class ProjectUpdateView(LoginRequiredMixin, UpdateView):
     model = Project
@@ -132,7 +132,10 @@ class ProjectNext(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Próximos Proyectos'
-        projects = Project.objects.filter(fechaInicio__gte = (datetime.strftime((datetime.today() + timedelta(days=-datetime.today().weekday(), weeks=1)), '%Y-%m-%d')))
+        date = datetime.today()
+        week = date.strftime("%V")
+        week = int(week) + 1
+        projects = Project.objects.filter(fechaInicio__week = week).order_by('-fechaInicio')
         context['projects'] = projects
         return context
 
