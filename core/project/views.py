@@ -109,7 +109,7 @@ class ProjectHistoryEmployeeView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Historial de Proyectos'
-        context['projects'] = Project.objects.filter(empleado=self.request.user, fechaFin__lt = datetime.now() )
+        context['projects'] = Project.objects.filter(empleado=self.request.user, fechaFin__lt = datetime.now() ).order_by('fechaFin')
         return context
 
 @method_decorator(is_client, name="dispatch")
@@ -120,7 +120,7 @@ class ProjectHistoryClientView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Historial de Proyectos'
-        projects = Project.objects.filter(participa__cliente = self.request.user, fechaFin__lt = datetime.now())
+        projects = Project.objects.filter(participa__cliente = self.request.user, fechaFin__lt = datetime.now()).order_by('fechaFin')
         context['projects'] = projects
         return context
 

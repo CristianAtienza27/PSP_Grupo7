@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.http.response import HttpResponseRedirect
 from core.project.models import Project
 from core.user.models import User
@@ -87,7 +88,11 @@ def employee_project(func):
 def owns_project(func):
     def check_and_call(request, *args, **kwargs):
         pk = kwargs['pk']
-        project_owner = Project.objects.get(pk=pk).empleado
+        try:
+            project_owner = Project.objects.get(pk=pk).empleado
+        except Project.DoesNotExist:
+            messages.success(request, 'Acción no permitida')
+            return HttpResponseRedirect('/')
         
         if not request.user.is_superuser:
             if not (project_owner == request.user):
@@ -96,6 +101,18 @@ def owns_project(func):
                     return HttpResponseRedirect('/')
                 elif request.user.role_user == 'Empleado':
                     return HttpResponseRedirect('/')
+
+        return func(request, *args, **kwargs)
+
+    return check_and_call
+
+
+def same_user(func):
+    def check_and_call(request, *args, **kwargs):
+        
+        if request.user.role_user == 'Cliente':
+            messages.success(request, 'Acción no permitida')
+            return HttpResponseRedirect('/')
 
         return func(request, *args, **kwargs)
 
