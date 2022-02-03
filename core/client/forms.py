@@ -28,6 +28,7 @@ class ClientForm(ModelForm):
                 }
             ),
             'fechaNacimiento': DateInput(
+                format=('%Y-%m-%d'),
                 attrs={
                     'placeholder': 'Ingrese su fecha de nacimiento',
                     'type': 'date'

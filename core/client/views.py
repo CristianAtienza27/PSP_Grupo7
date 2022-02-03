@@ -65,7 +65,6 @@ class ClientCreateView(CreateView):
             return HttpResponseRedirect(self.success_url)
         else:
             return self.render_to_response(self.get_context_data(form=form))
-
     
     def get_success_url(self):
         messages.success(self.request, 'Cliente registrado con éxito')

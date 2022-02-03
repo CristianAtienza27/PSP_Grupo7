@@ -156,16 +156,15 @@ class ProjectInscriptionView(LoginRequiredMixin, ListView):
         fechaFin = self.request.GET.get('fechaFin',None)
 
         if categoria is not None and fechaIni != '' and fechaFin != '':
-            projects = Project.objects.filter(categoria_id=categoria,fechaInicio__lte=fechaIni,fechaFin__gte=fechaFin).exclude(pk__in = idProj)
+            projects = Project.objects.filter(categoria_id=categoria,fechaFin__lt=fechaFin).exclude(pk__in = idProj)
         elif fechaIni is None and fechaFin is None:
             projects = Project.objects.filter().exclude(pk__in = idProj)
         elif fechaIni != '' and fechaFin != '':
-            projects = Project.objects.filter(fechaInicio__lte=fechaIni,fechaFin__gte=fechaFin).exclude(pk__in = idProj)
+            projects = Project.objects.filter(fechaFin__lt=fechaFin).exclude(pk__in = idProj)
         elif categoria is not None and categoria != '0':
             projects = Project.objects.filter(categoria_id=categoria).exclude(pk__in = idProj)
         else:
             projects = Project.objects.filter().exclude(pk__in = idProj)
-            print(projects)
 
         context['projects'] = projects
         context['categories'] = Category.objects.all()
