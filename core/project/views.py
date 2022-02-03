@@ -47,10 +47,24 @@ class ProjectCreateView(LoginRequiredMixin, CreateView):
         context['title'] = 'Creación de Proyecto'
         context['list_url'] = reverse_lazy('project:project_list')
         return context
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            project = form.save(commit=False)
+            project.empleado = User.objects.filter(pk=self.request.user.id).first()
+            project.save()
+            messages.success(request, 'Proyecto registrado con éxito')
+            return HttpResponseRedirect(reverse('project:project_list'))
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
+        
     
-    def get_success_url(self):
-        messages.success(self.request, 'Proyecto registrado con éxito')
-        return reverse('project:project_list')
+    # def get_success_url(self):
+    #     messages.success(self.request, 'Proyecto registrado con éxito')
+    #     return reverse('project:project_list')
     
 @method_decorator(owns_project, name="dispatch")
 class ProjectUpdateView(LoginRequiredMixin, UpdateView):
@@ -126,7 +140,7 @@ class ProjectNext(LoginRequiredMixin, ListView):
         # print(datetime.strftime((datetime.today() + timedelta(days=-datetime.today().weekday(), weeks=1)), '%Y-%m-%d')) 
 
 class ProjectInscriptionView(LoginRequiredMixin, ListView):
-    model = Participa
+    model = Project
     template_name = 'project/listC.html'
 
     def get_context_data(self, **kwargs):
@@ -146,11 +160,12 @@ class ProjectInscriptionView(LoginRequiredMixin, ListView):
         elif fechaIni is None and fechaFin is None:
             projects = Project.objects.filter().exclude(pk__in = idProj)
         elif fechaIni != '' and fechaFin != '':
-            projects = Project.objects.filter(fechaInicio=fechaIni).filter(fechaFin=fechaFin).exclude(pk__in = idProj)
+            projects = Project.objects.filter(fechaInicio__lte=fechaIni,fechaFin__gte=fechaFin).exclude(pk__in = idProj)
         elif categoria is not None and categoria != '0':
             projects = Project.objects.filter(categoria_id=categoria).exclude(pk__in = idProj)
         else:
             projects = Project.objects.filter().exclude(pk__in = idProj)
+            print(projects)
 
         context['projects'] = projects
         context['categories'] = Category.objects.all()
@@ -175,8 +190,7 @@ class ProjectClientsView(LoginRequiredMixin, ListView):
         return context
     
     def post(self, request, *args, **kwargs):
-        Participa.objects.filter(proyecto_id=self.kwargs.get('pk'), 
-        cliente_id=self.request.POST.get('cliente_id')).update(rol=self.request.POST.get('rol'))
+        Participa.objects.filter(proyecto_id=self.kwargs.get('pk'),cliente_id=self.request.POST.get('cliente_id')).update(rol=self.request.POST.get('rol'))
         messages.success(request, 'Rol asignado con éxito')
         return HttpResponseRedirect(reverse('project:project_clients', kwargs={'pk': self.kwargs.get('pk')}))
 
