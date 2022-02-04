@@ -105,15 +105,3 @@ def owns_project(func):
         return func(request, *args, **kwargs)
 
     return check_and_call
-
-
-def same_user(func):
-    def check_and_call(request, *args, **kwargs):
-        
-        if request.user.role_user == 'Cliente':
-            messages.success(request, 'Acción no permitida')
-            return HttpResponseRedirect('/')
-
-        return func(request, *args, **kwargs)
-
-    return check_and_call

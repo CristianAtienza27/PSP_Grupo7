@@ -9,17 +9,22 @@ from django.contrib import messages
 
 import PSP_Grupo7.settings as setting
 
-
 class LoginFormView(LoginView):
     template_name = 'login.html'
 
     def get_success_url(self):
-        messages.success(self.request, '¡Bienvenido, ' + self.request.user.username + '!')
-        if self.request.user.role_user == 'Cliente':
-                 return reverse('project:project_inscription')
-        elif self.request.user.role_user == 'Empleado':
-                return reverse('project:project_list')
-        return reverse('index')
+        if not self.request.user.is_superuser:
+            if self.request.user.is_active == True:
+                messages.success(self.request, '¡Bienvenido, ' + self.request.user.username + '!')
+                if self.request.user.role_user == 'Cliente':
+                    return reverse('project:project_inscription')
+                elif self.request.user.role_user == 'Empleado':
+                    return reverse('project:project_list')
+            messages.success(self.request, '¡Espere a ser activado por el Admin.!')
+        else:
+            return reverse('index')
+        # messages.success(self.request, 'Logout con éxito')
+        # return reverse('index')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

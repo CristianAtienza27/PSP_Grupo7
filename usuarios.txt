@@ -1,2 +1,11 @@
-username = Jose 
-password = josejuan123
+admin: 
+nombre: admin
+passwd: 12345678
+
+cliente
+nombre: josejuan
+passwd: 12345678
+
+empleado: 
+nombre: pepe
+passwd: 12345678
