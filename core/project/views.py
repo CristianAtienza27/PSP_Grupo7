@@ -194,7 +194,7 @@ class ProjectClientsView(LoginRequiredMixin, ListView):
         messages.success(request, 'Rol asignado con éxito')
         return HttpResponseRedirect(reverse('project:project_clients', kwargs={'pk': self.kwargs.get('pk')}))
 
-@method_decorator(is_client, name="dispatch")
+@is_client
 def InscriptionCreate(request,pk):
     project = Project.objects.filter(pk=pk).first()
 
