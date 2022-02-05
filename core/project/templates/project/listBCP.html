@@ -1,0 +1,59 @@
+{% extends 'list.html' %}
+{% load static %}
+{% block head_list %}
+
+{% endblock %}
+
+{% block columns %}
+    <!-- <tr>
+        <th scope="col" style="width: 15%;">Nombre</th>
+        <th scope="col" style="width: 15%;">Categoría</th>
+    </tr> -->
+{% endblock %}
+
+{% block rows %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+        <form class="d-flex">
+          <input style="margin-right: 10px;width:33%" name="cliente" class="form-control me-2" placeholder="Buscar Cliente" type="search" placeholder="Search" aria-label="Search">
+          <select style="margin-right: 10px;width:150px" class="form-control" aria-label=".form-select-lg example" name="rol">
+            <option selected disabled>Rol</option>
+            {% for rol in roles %}
+            <option>{{ rol }}</option>
+            {% endfor %}
+          </select>
+          <button class="btn btn-outline-primary" type="submit">Buscar</button>
+        </form>
+      </div>
+    </div>
+  </nav>
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      <!-- {% for project in projects %} -->
+        <div class="col">
+          <div class="card h-100">
+            <img src="" width="50" height="150" class="card-img-top" alt="...">
+            <div class="card-body">
+              <h5 class="card-title"></h5>
+              <p class="card-text">Nivel: </p>
+              <p class="card-text"></p>
+            </div>
+            <div class="card-footer">
+              <small class="text-muted"></small>
+            </div>
+          </div>
+        </div>
+      <!-- {% endfor %} -->
+    </div>
+{% endblock %}
+
+{% block buttons_list %}
+
+{% endblock %}
+
+{% block javascript %}
+
+{% endblock %}

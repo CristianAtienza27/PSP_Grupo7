@@ -32,15 +32,15 @@
                         <h5 class="card-title">Título: {{ project.titulo }}</h5>
                         <p class="card-text">Nivel: {{ project.nivel }}</p>
                         <p class="card-text">Categoría: {{ project.categoria.nombre }}</p>
-                        <p class="card-text">Descripción: {{ project.descripcion }}</p>
                         </div>
                         <div class="col">
-                            <p class="card-text">Informe Final: {{ project.informeFinal }}</p>
+                          <p class="card-text">Descripción: {{ project.descripcion }}</p>
                             <p class="card-text">Periodo: {{ project.fechaInicio}} al {{ project.fechaFin }}</p>
                         </div>
                     </div>
                         <div class="card-footer">
                             <a href="{% url 'project:project_clients' pk=project.id %}" class="btn btn-primary">Ver Clientes</a>
+                            <a href="{% url 'project:project_finish' pk=project.id %}" class="btn btn-primary">Finalizar</a>
                             <a href="{% url 'project:project_update' pk=project.id %}" class="btn btn-warning">Editar</a>
                             <a href="{% url 'project:project_delete' pk=project.id %}" class="btn btn-danger">Eliminar</a>
                           </div>

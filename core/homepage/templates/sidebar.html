@@ -79,12 +79,6 @@
               </li>
               {% elif request.user.role_user == 'Empleado' %}
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'adm:employee_update' pk=request.user.id %}">
-                    <i class="far fa-circle nav-icon" aria-hidden="true"></i>
-                    <p>Datos Personales</p>
-                </a>
-              </li>
-              <li class="nav-item">
                 <a class="nav-link" href="{% url 'project:project_employee_history' %}">
                     <i class="far fa-circle nav-icon" aria-hidden="true"></i>
                     <p>Historial Proyectos</p>
@@ -94,6 +88,18 @@
                 <a class="nav-link" href="{% url 'project:project_list' %}">
                     <i class="far fa-circle nav-icon" aria-hidden="true"></i>
                     <p>Gestión de Proyectos</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'project:project_clients_participation' %}">
+                    <i class="far fa-circle nav-icon" aria-hidden="true"></i>
+                    <p>Clientes</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'adm:employee_update' pk=request.user.id %}">
+                    <i class="far fa-circle nav-icon" aria-hidden="true"></i>
+                    <p>Datos Personales</p>
                 </a>
               </li>
               {% endif %}

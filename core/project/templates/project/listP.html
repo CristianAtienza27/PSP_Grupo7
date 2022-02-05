@@ -20,7 +20,13 @@
             <div class="card-body">
               <h5 class="card-title">{{ project.titulo }}</h5>
               <p class="card-text">Nivel: {{ project.nivel }}</p>
-              <p class="card-text">{{ project.descripcion }}</p>
+              <p class="card-text">Informe final: {% if project.informeFinal == ''%}<span class="badge bg-primary rounded-pill">Sin informe</span> {% endif %} </p>
+              <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{ project.id }}">
+                <textarea name="informeFinal" style="width: 100%">{{ project.informeFinal }}</textarea>
+                <button class="btn btn-primary">Actualizar Informe</button>
+              </form>
             </div>
             <div class="card-footer">
               <small class="text-muted">Del {{ project.fechaInicio}} al {{ project.fechaFin }}</small>

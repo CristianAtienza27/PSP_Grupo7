@@ -1,6 +1,7 @@
 from django.db import models
 from core.user.models import User
 from core.category.models import Category
+from datetime import datetime
 
 class Project(models.Model):
     titulo = models.CharField(max_length=150, verbose_name='Título')

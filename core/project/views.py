@@ -1,6 +1,6 @@
 from datetime import datetime
 from django.shortcuts import render
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView
 from django.urls import reverse_lazy,reverse
 from core.client.forms import ClientForm
 from core.project.forms import ProjectForm
@@ -27,13 +27,13 @@ class ProjectListView(LoginRequiredMixin, ListView):
     page_kwarg = 'page'
     status_kwarg = 'status'
     model = Project
-    ordering = ['id']
+    ordering = ['fechaFin']
     template_name = 'project/list.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Listado de Proyectos'
-        context['projects'] = Project.objects.filter(empleado=self.request.user).order_by('id')
+        context['projects'] = Project.objects.filter(empleado=self.request.user, fechaFin__gte = datetime.today()+timedelta(days=+1)).order_by('fechaFin')
         context['create_url'] = reverse_lazy('project:project_create')
         return context
 
@@ -109,9 +109,15 @@ class ProjectHistoryEmployeeView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Historial de Proyectos'
-        context['projects'] = Project.objects.filter(empleado=self.request.user, fechaFin__lt = datetime.now() ).order_by('fechaFin')
+        context['projects'] = Project.objects.filter(empleado=self.request.user, fechaFin__lt = datetime.today()+timedelta(days=+1) ).order_by('fechaFin')
         return context
 
+    def post(self, request, *args, **kwargs):
+        Project.objects.filter(pk=self.request.POST.get('id')).update(informeFinal=self.request.POST.get('informeFinal'))
+        messages.success(request, 'Informe final actualizado con éxito')
+        url = reverse('project:project_employee_history')
+        return HttpResponseRedirect(url)
+        
 @method_decorator(is_client, name="dispatch")
 class ProjectHistoryClientView(LoginRequiredMixin, ListView):
     template_name = 'project/listP.html'
@@ -194,6 +200,18 @@ class ProjectClientsView(LoginRequiredMixin, ListView):
         messages.success(request, 'Rol asignado con éxito')
         return HttpResponseRedirect(reverse('project:project_clients', kwargs={'pk': self.kwargs.get('pk')}))
 
+@method_decorator(is_employee, name="dispatch")
+class ProjectClientsParticipationView(LoginRequiredMixin, ListView):
+    model = Project
+    template_name = 'project/listBCP.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['roles'] = Participa.ParticipaType
+        context['title'] = 'Listado de Proyectos'
+        return context    
+
 @is_client
 def InscriptionCreate(request,pk):
     project = Project.objects.filter(pk=pk).first()
@@ -211,3 +229,17 @@ def InscriptionCreate(request,pk):
     
     url = reverse('project:project_inscription')
     return HttpResponseRedirect(url)
+
+@owns_project
+def ProjectFinish(request,pk):
+    project = Project.objects.filter(pk=pk).first()
+
+    if project is not None:
+        Project.objects.filter(pk=pk).update(fechaFin=datetime.today())
+        messages.success(request, 'Proyecto finalizado con éxito')
+        url = reverse('project:project_employee_history')
+    
+    return HttpResponseRedirect(url)
+
+
+

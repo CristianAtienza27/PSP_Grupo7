@@ -84,7 +84,6 @@ def employee_project(func):
 
     return check_and_call
 
-
 def owns_project(func):
     def check_and_call(request, *args, **kwargs):
         pk = kwargs['pk']

@@ -13,7 +13,10 @@ urlpatterns = [
     path('employe/history/', ProjectHistoryEmployeeView.as_view(), name='project_employee_history'),
     path('client/history/', ProjectHistoryClientView.as_view(), name='project_client_history'),
     path('client/nextProjects/', ProjectNext.as_view(), name='project_nexts'),
-    path('clients/<int:pk>', ProjectClientsView.as_view(), name='project_clients')
+    path('clients/<int:pk>', ProjectClientsView.as_view(), name='project_clients'),
+    path('/project/finish/<int:pk>', ProjectFinish, name='project_finish'),
+    path('/clients/participation', ProjectClientsParticipationView.as_view(), name='project_clients_participation'),
+
 ]
 
     #Categorías
