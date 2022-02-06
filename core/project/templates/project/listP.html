@@ -18,15 +18,17 @@
           <div class="card h-100">
             <img src="{{project.categoria.foto.url}}" width="50" height="150" class="card-img-top" alt="...">
             <div class="card-body">
-              <h5 class="card-title">{{ project.titulo }}</h5>
+              <h5 class="card-title">{{ project.proyecto.titulo }}</h5>
               <p class="card-text">Nivel: {{ project.nivel }}</p>
+              {% if request.user.role_user == 'Empleado' %}
               <p class="card-text">Informe final: {% if project.informeFinal == ''%}<span class="badge bg-primary rounded-pill">Sin informe</span> {% endif %} </p>
               <form method="post">
                 {% csrf_token %}
                 <input type="hidden" name="id" value="{{ project.id }}">
-                <textarea name="informeFinal" style="width: 100%">{{ project.informeFinal }}</textarea>
-                <button class="btn btn-primary">Actualizar Informe</button>
+                <textarea class="md-textarea form-control" name="informeFinal" style="width: 100%">{{ project.informeFinal }}</textarea>
+                <button class="btn btn-primary" style="margin-top: 10px">Actualizar Informe</button>
               </form>
+              {% endif %}
             </div>
             <div class="card-footer">
               <small class="text-muted">Del {{ project.fechaInicio}} al {{ project.fechaFin }}</small>

@@ -109,7 +109,7 @@ class ProjectHistoryEmployeeView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Historial de Proyectos'
-        context['projects'] = Project.objects.filter(empleado=self.request.user, fechaFin__lt = datetime.today()+timedelta(days=+1) ).order_by('fechaFin')
+        context['projects'] = Project.objects.filter(empleado=self.request.user, fechaFin__lt = datetime.today()+timedelta(days=+1) ).order_by('-fechaFin')
         return context
 
     def post(self, request, *args, **kwargs):
@@ -207,9 +207,21 @@ class ProjectClientsParticipationView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
+        context['projects'] = Project.objects.filter(empleado=self.request.user)
         context['roles'] = Participa.ParticipaType
-        context['title'] = 'Listado de Proyectos'
+
+        rol = self.request.GET.get('rol', None)
+        project = self.request.GET.get('project',None)
+
+        if rol is not None and project is None:
+            participations = Participa.objects.filter(proyecto__empleado = self.request.user, rol = rol)
+        elif rol is not None and project is not None:
+            participations = Participa.objects.filter(proyecto__empleado = self.request.user, rol = rol, proyecto = project)
+        else:
+            participations = Participa.objects.filter(proyecto__empleado = self.request.user)
+        
+        context['participations'] = participations
+        context['title'] = 'Clientes en nuestros proyectos'
         return context    
 
 @is_client

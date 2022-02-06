@@ -18,12 +18,18 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+        <a href="{% url 'project:project_clients_participation' %}" class="navbar-brand" style="margin-right: 40px">Ver Todos</a>
         <form class="d-flex">
-          <input style="margin-right: 10px;width:33%" name="cliente" class="form-control me-2" placeholder="Buscar Cliente" type="search" placeholder="Search" aria-label="Search">
           <select style="margin-right: 10px;width:150px" class="form-control" aria-label=".form-select-lg example" name="rol">
             <option selected disabled>Rol</option>
             {% for rol in roles %}
             <option>{{ rol }}</option>
+            {% endfor %}
+          </select>
+          <select style="margin-right: 10px;width:200px" class="form-control" aria-label=".form-select-lg example" name="project">
+            <option selected disabled>Proyectos</option>
+            {% for proj in projects %}
+            <option {% if proj.id == project %} selected {% endif %} value="{{proj.id}}">{{ proj.titulo }}</option>
             {% endfor %}
           </select>
           <button class="btn btn-outline-primary" type="submit">Buscar</button>
@@ -31,22 +37,23 @@
       </div>
     </div>
   </nav>
+</nav>
     <div class="row row-cols-1 row-cols-md-3 g-4">
-      <!-- {% for project in projects %} -->
+      {% for p in participations %}
         <div class="col">
           <div class="card h-100">
-            <img src="" width="50" height="150" class="card-img-top" alt="...">
+            <img src="{{p.proyecto.categoria.foto.url}}" width="50" height="150" class="card-img-top" alt="...">
             <div class="card-body">
-              <h5 class="card-title"></h5>
-              <p class="card-text">Nivel: </p>
-              <p class="card-text"></p>
+              <h5 class="card-title">{{ p.cliente.nombre }} {{ p.cliente.apellidos }}</h5>
+              <p class="card-text">Proyecto: {{ p.proyecto.titulo }}</p>
+              <p class="card-text">Rol: {{ p.rol }}</p>
             </div>
             <div class="card-footer">
-              <small class="text-muted"></small>
+              <small class="text-muted">Periodo: {{ p.proyecto.fechaInicio}} al {{ p.proyecto.fechaFin }}</small>
             </div>
           </div>
         </div>
-      <!-- {% endfor %} -->
+      {% endfor %}
     </div>
 {% endblock %}
 
