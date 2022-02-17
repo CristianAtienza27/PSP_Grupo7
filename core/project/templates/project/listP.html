@@ -12,13 +12,25 @@
 {% endblock %}
 
 {% block rows %}
+<nav class="navbar navbar-light bg-light">
+  <form class="container-fluid" action="{% url 'project:client_projects_pdf' %}">
+    <div class="input-group">
+      <span class="input-group-text" id="basic-addon1">Filtros: </span>
+      <span class="input-group-text" id="basic-addon1">Fecha de Inicio: </span>
+      <input type="date" class="form-control" name="fechaIni" required>
+      <span class="input-group-text" id="basic-addon1">Fecha Final: </span>
+      <input type="date" class="form-control" name="fechaFin" required>
+      <button type="submit" class="btn btn-primary">Buscar</button>
+    </div>
+  </form>
+</nav>
     <div class="row row-cols-1 row-cols-md-3 g-4">
       {% for project in projects %}
         <div class="col">
           <div class="card h-100">
             <img src="{{project.categoria.foto.url}}" width="50" height="150" class="card-img-top" alt="...">
             <div class="card-body">
-              <h5 class="card-title">{{ project.proyecto.titulo }}</h5>
+              <h5 class="card-title">{{ project.titulo }}</h5>
               <p class="card-text">Nivel: {{ project.nivel }}</p>
               {% if request.user.role_user == 'Empleado' %}
               <p class="card-text">Informe final: {% if project.informeFinal == ''%}<span class="badge bg-primary rounded-pill">Sin informe</span> {% endif %} </p>

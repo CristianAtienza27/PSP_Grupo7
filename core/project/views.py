@@ -1,6 +1,7 @@
+from ast import Try
 from datetime import datetime
 from django.shortcuts import render
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView, TemplateView
 from django.urls import reverse_lazy,reverse
 from core.client.forms import ClientForm
 from core.project.forms import ProjectForm
@@ -14,7 +15,14 @@ from django.http import HttpResponseRedirect, JsonResponse
 from datetime import datetime, timedelta
 from django.contrib.auth.mixins import LoginRequiredMixin
 from core.mixins import ValidatePermissionRequiredMixin
-
+from io import BytesIO
+from xhtml2pdf import pisa
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+from django.template.loader import get_template
+from django.template import Context
+from django.http import HttpResponse
+# from cgi import escape
 from core.decorators import *
 from django.utils.decorators import method_decorator
 
@@ -127,8 +135,15 @@ class ProjectHistoryClientView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Historial de Proyectos'
         projects = Project.objects.filter(participa__cliente = self.request.user, fechaFin__lt = datetime.now()).order_by('fechaFin')
+        print(projects)
         context['projects'] = projects
         return context
+
+    def post(self, request, *args, **kwargs):
+        fechaIni = self.request.POST.get('fechaIni',None)
+        fechaFin = self.request.POST.get('fechaFin',None)
+        projects = Project.objects.filter(participa__cliente = self.request.user, fechaIni__gt = fechaIni, fechaFin__lt = fechaFin).order_by('fechaFin')
+        
 
 @method_decorator(is_client, name="dispatch")
 class ProjectNext(LoginRequiredMixin, ListView):
@@ -222,7 +237,35 @@ class ProjectClientsParticipationView(LoginRequiredMixin, ListView):
         
         context['participations'] = participations
         context['title'] = 'Clientes en nuestros proyectos'
-        return context    
+        return context   
+
+class clientProjectsPDF(TemplateView):
+    model = Project 
+    template_name = 'project/client_projects.html' 
+
+    def get_context_data(self, **kwargs):
+        context = super(clientProjectsPDF, self).get_context_data(**kwargs)
+        fechaIni = self.request.GET.get('fechaIni',None)
+        fechaFin = self.request.GET.get('fechaFin',None)
+        projects = Project.objects.filter(participa__cliente = self.request.user, fechaInicio__gte = fechaIni, fechaFin__lt = fechaFin).order_by('-fechaFin')
+        context['projects'] = projects
+        print(self.request.GET.get('fechaIni'))
+        return context 
+    
+    def render_to_response(self, context, **kwargs):
+        template_path = 'project/client_projects.html'
+        context = {'projects': context['projects']}
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="report.pdf"'
+        template = get_template(template_path)
+        html = template.render(context)
+
+        pisa_status = pisa.CreatePDF(
+        html, dest=response)
+
+        if pisa_status.err:
+            return HttpResponse('We had some errors <pre>' + html + '</pre>')
+        return response
 
 @is_client
 def InscriptionCreate(request,pk):
@@ -252,6 +295,3 @@ def ProjectFinish(request,pk):
         url = reverse('project:project_employee_history')
     
     return HttpResponseRedirect(url)
-
-
-

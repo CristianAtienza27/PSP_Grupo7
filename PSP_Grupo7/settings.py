@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'core.employee',
     'core.category',
     'core.project',
+    'core.Api',
     'rest_framework',
     'rest_framework.authtoken',
     'corsheaders',

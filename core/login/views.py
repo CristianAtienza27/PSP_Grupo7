@@ -23,8 +23,6 @@ class LoginFormView(LoginView):
             messages.success(self.request, '¡Espere a ser activado por el Admin.!')
         else:
             return reverse('index')
-        # messages.success(self.request, 'Logout con éxito')
-        # return reverse('index')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
