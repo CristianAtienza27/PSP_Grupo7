@@ -25,7 +25,6 @@ from django.http import HttpResponse
 # from cgi import escape
 from core.decorators import *
 from django.utils.decorators import method_decorator
-
 #UTIL: https://docs.djangoproject.com/en/4.0/topics/class-based-views/generic-display/
 #Para las consultas : https://docs.djangoproject.com/en/4.0/ref/models/querysets
 

@@ -4,5 +4,6 @@ from django.urls import path
 app_name = 'api'
 
 urlpatterns = [
-    path('login', LoginView.as_view())
+    path('login', LoginView.as_view()),
+    path('historial', ClientHistorial.as_view()),
 ]

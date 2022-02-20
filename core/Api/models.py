@@ -1,12 +1,10 @@
 from django.db import models
-from rest_framework import serializers
+from rest_framework import serializers, viewsets
 from core.user.models import User
 from core.project.models import Project
+from rest_framework.permissions import IsAuthenticated
+from core.Api.serializers import ClientSerializer
 
-class ClientSerializers(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['nombre','apellidos','email','fechaNacimiento','fechaAlta','activo','role_user']
 
 class ProjectSerializers(serializers.ModelSerializer):
     class Meta:
