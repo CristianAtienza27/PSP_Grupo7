@@ -35,7 +35,7 @@ class LoginView(APIView):
         token = Token.objects.get_or_create(user=user)
 
         return Response(
-            {'user':ClientSerializer(user).data,'token': token[0].key}
+            {'user': ClientSerializer(user).data,'token': token[0].key}
             ,
             status=status.HTTP_200_OK)
 

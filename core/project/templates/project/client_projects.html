@@ -94,19 +94,21 @@ h4 {
 }
 .title {
   line-height: 28px;
-  font-size: 24px;
+  font-size: 36px;
   font-family: monospace;
+  color: lightcoral
+
 }
 .description {
   font-size: 17px;
   margin-bottom: 20px;
-}
+}  
 
 table{
   margin: 2 6mm;
   width: 50%;
   padding-top: 7px;
-  border: 1px solid black;
+  /* border-top: 1px solid black; */
 }
 
 </style>
@@ -130,11 +132,17 @@ table{
   {% for project in projects %}
   <table>
     <tr>
-      <td>{{project.titulo}}</td>
+      <td class="title">{{project.titulo}}</td>
     </tr>
     <tr>
       <td> {{project.descripcion }}</td>
     </tr>
+    <tr>
+        <td>Jefe de proyecto: {{project.empleado.nombre}} {{project.empleado.apellidos}}</td>
+      </tr>
+      <tr>
+        <td>Categoría: {{project.categoria.nombre}}</td>
+      </tr>
   </table>
   {% endfor %}
   </div>
